@@ -6,6 +6,7 @@ import { makeData } from "./utils";
 class TableTest extends Component {
   constructor() {
     super();
+    this.renderEditable = this.renderEditable.bind(this);
     this.state = {
       tableData: makeData()
     };
@@ -18,12 +19,14 @@ class TableTest extends Component {
         columns: [
           {
             Header: "First Name",
-            accessor: "firstName"
+            accessor: "firstName",
+            Cell: this.renderEditable
           },
           {
             Header: "Last Name",
             id: "lastName",
-            accessor: d => d.lastName
+            accessor: d => d.lastName,
+            Cell: this.renderEditable
           }
         ]
       },
@@ -32,11 +35,13 @@ class TableTest extends Component {
         columns: [
           {
             Header: "Age",
-            accessor: "age"
+            accessor: "age",
+            Cell: this.renderEditable
           },
           {
             Header: "Status",
-            accessor: "status"
+            accessor: "status",
+            Cell: this.renderEditable
           }
         ]
       },
@@ -45,23 +50,52 @@ class TableTest extends Component {
         columns: [
           {
             Header: "Visits",
-            accessor: "visits"
+            accessor: "visits",
+            Cell: this.renderEditable
           }
         ]
       }
     ];
   }
 
+  renderEditable(cellInfo) {
+    const { tableData } = this.state;
+    if (tableData == null) {
+      return null;
+    }
+
+    const isReadOnly = false;
+
+    return (
+      <input
+        type="text"
+        className="form-control"
+        disabled={isReadOnly}
+        onChange={e => {
+          if (this.state.tableData != null) {
+            const tableData2 = [...this.state.tableData];
+            tableData2[cellInfo.index][cellInfo.column.id] = e.target.value;
+            this.setState({ tableData: tableData2 });
+          }
+        }}
+        value={
+          tableData[cellInfo.index][cellInfo.column.id] != null
+            ? tableData[cellInfo.index][cellInfo.column.id]
+            : ""
+        }
+      />
+    );
+  }
+
   render() {
     const { tableData } = this.state;
-    console.log(tableData);
     return (
       <div>
         This is tabletest
         <ReactTable
           data={tableData}
           columns={this.getColumns()}
-          defaultPageSize={10}
+          defaultPageSize={15}
           className="-striped -highlight"
         />
       </div>

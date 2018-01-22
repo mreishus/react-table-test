@@ -14,9 +14,9 @@ class App extends Component {
           */}
           React-table-test
         </header>
-        <p className="App-intro">
+        <div className="App-intro">
           <TableTest />
-        </p>
+        </div>
       </div>
     );
   }
