@@ -1,5 +1,7 @@
 import React from "react";
 import classnames from "classnames";
+import { shallowEqual } from "shouldcomponentupdate-children";
+
 //
 export default {
   get,
@@ -126,11 +128,22 @@ function makeTemplateComponent(compClass, displayName) {
   if (!displayName) {
     throw new Error("No displayName found for template component:", compClass);
   }
-  const cmp = ({ children, className, ...rest }) => (
-    <div className={classnames(compClass, className)} {...rest}>
-      {children}
-    </div>
-  );
+
+  let cmp = class extends React.Component {
+    shouldComponentUpdate(nextProps, nextState) {
+      return shallowEqual(this.props, nextProps, this.state, nextState);
+    }
+
+    render() {
+      const { children, className, ...rest } = this.props;
+      return (
+        <div className={classnames(compClass, className)} {...rest}>
+          {children}
+        </div>
+      );
+    }
+  };
+
   cmp.displayName = displayName;
   return cmp;
 }
