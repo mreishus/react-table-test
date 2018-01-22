@@ -126,18 +126,11 @@ function makeTemplateComponent(compClass, displayName) {
   if (!displayName) {
     throw new Error("No displayName found for template component:", compClass);
   }
-
-  let cmp = class extends React.PureComponent {
-    render() {
-      const { children, className, ...rest } = this.props;
-      return (
-        <div className={classnames(compClass, className)} {...rest}>
-          {children}
-        </div>
-      );
-    }
-  };
-
+  const cmp = ({ children, className, ...rest }) => (
+    <div className={classnames(compClass, className)} {...rest}>
+      {children}
+    </div>
+  );
   cmp.displayName = displayName;
   return cmp;
 }
