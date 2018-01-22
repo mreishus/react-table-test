@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import ReactTable from "react-table";
+//import ReactTable from "react-table";
+import ReactTable from "./external/react-table/src/index.js";
 import "react-table/react-table.css";
 import { makeData } from "./utils";
 
